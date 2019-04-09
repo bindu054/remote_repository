@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="background: url({% static 'img/grey' %}.jpeg);background-size: cover">
+<form action="" method="post">
+    {% csrf_token %}
+{{ form.as_p }}
+    <input type="submit" value="update">
+</form>
+
+</body>
+</html>

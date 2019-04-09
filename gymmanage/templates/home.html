@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+a:link, a:visited {
+  background-color: #f44336;
+  color: white;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+
+a:hover, a:active {
+  background-color: red;
+}
+</style>
+</head>
+<body style="background: url({% static 'img/gymm' %}.jpg);background-size: cover">
+<table align="center" border="0">
+{#    <tr><th align="center" colspan="4"><img src="{% static 'img/imgfit2.jpg' %}" width="150" height="150"></th><th>GYM</th></tr>#}
+    <tr><th align="center" colspan="6"><font face="Algerian" size="20" color="black">GYM</font></th></tr>
+<tr><td align="right" colspan="2"><a href="/home/">Home</a></td>
+    <td align="right" colspan="2"><a href="/openadd/?type=openadd">Admin</a> </td>
+    <td align="right"><a href="/user/?type=userss">User</a></td><br>
+    <td align="right"><a href="/aboutus/">About Us</a></td></tr>
+<br>
+<tr><td></td></tr>
+<tr><td></td></tr>
+<tr><td></td></tr>
+<tr><th align="center" colspan="10">BE FIT, BE HEALTHY</th></tr>
+{#<a href="default.asp" target="_blank">This is a link</a>#}
+{#{% if type == "homiie" %}#}
+{#<tr><td align="center">{{ message }}</td></tr>#}
+{#{% endif %}#}
+<br>
+<br>
+    {% if type == "aboutgym" %}
+        <table align="center"><th align="center" colspan="3">About Us</th>
+            <tr><td><img src="{% static 'img/eqp' %}.jpg"height="200"><font color="white">Dumbells</font></td>
+{#        <tr><td align="center">Dumbells</td></tr>#}
+                <td><img src="{% static 'img/eqp1' %}.jpg"><font color="white">Thread Mill</font></td>
+            <td><img src="{% static 'img/eqp2' %}.png" height="200"><font color="white">Cycle</font></td></tr></table>
+        <p align="center"><font face="Algerian" color="red">We have the most prominent equipment and trainers around this locality.<br>
+            We can proudly tell you that we care for your health and fitness because your health is our responsibilty</font></p>
+    {% endif %}
+{% if type == "openadd" %}
+<form action="/login/" method="post">
+    {% csrf_token %}
+  <table align="center" border="0">
+      <tr><th><img src="{% static 'img/admin1' %}.jpg" height="50" width="50">ADMIN</th></tr>
+      <tr><td><input type="text" placeholder="name" name="email" required></td></tr>
+      <tr><td><input type="password" placeholder="password" name="password" required></td></tr>
+      <tr><td><input type="submit" value="Login"></td></tr>
+{#      <tr><td><a href="/uregistration/?type=uregistration">REGISTRATION</a></td></tr>#}
+  </table>
+{% endif %}
+    {% if type == 'userss' %}
+<form action="/ulogin/" method="post">
+    {% csrf_token %}
+  <table align="center" border="0">
+  <tr><td><img src="{% static 'img/user' %}.png" height="80" width="80">USER</td></tr>
+      <tr><td><input type="email" placeholder="email" name="email" required></td></tr>
+      <tr><td><input type="password" placeholder="password" name="password" required></td></tr>
+      <tr><td><input type="submit" value="Login"></td></tr>
+      <tr><td><a href="/uregister/?type=uregister">REGISTRATION</a></td></tr>
+  <tr><td><a href="/forgetpassword/">FORGET PASSWORD</a> </td></tr>
+{#  <tr><td><a href="/forgetpass/?type=forgetpass">Forget Password</a></td></tr>#}
+{#      <tr><td>{{ mess }}</td></tr>#}
+      {% if type == "usermesa" %}
+    <table><tr><td>{{ mess }}</td></tr></table>
+{% endif %}
+
+  </table>
+    </form>
+    <table align="center">
+
+</table>
+{% endif %}
+
+    {% if type == "back" %}
+<h3 align="center">{{ mess }}</h3>
+        <h3 align="center"><a href="/back/">Back to home</a> </h3>
+{% endif %}
+
+{% if type == "uregister" %}
+<form action="/register/" method="post">
+{% csrf_token %}
+<table align="center" border="3">
+    <tr><td><input type="number" placeholder="idno" value="{{ idno }}" required name="idno" readonly ></td></tr>
+    <tr><td><input type="text" placeholder="name" required name="name"></td></tr>
+    <tr><td><input type="number" placeholder="age" required name="age"></td></tr>
+    <tr><td><input type="number" placeholder="contact" required name="contact"></td></tr>
+    <tr><td><input type="email" placeholder="email" required name="email"></td></tr>
+    <tr><td><input type="password" placeholder="password" required name="password"></td></tr>
+    <tr><td><textarea placeholder="address" name="address"></textarea></td></tr>
+    <tr><td><input type="submit" value="Registration"></td></tr>
+{% endif %}
+{% if type == 'noulogin' %}
+    <table align="center"><tr><td>{{ mess }}</td></tr></table>
+    <tr align="center"><td><a href="/backuser/">Back</a></td></tr>
+{% endif %}
+
+</table>
+    </form>
+</form>
+</table>
+
+{% if type == 'forgotpasswprd' %}
+    <form action="/forgottenpassword/" method="post">
+    {% csrf_token %}
+    <table align="center">
+    <tr>
+        <td>
+            <input type="email" placeholder="Enter your Email Id" name="email" required>
+        </td></tr>
+       <tr> <td>
+            <input type="submit" value="Get Password">
+       </td></tr>
+       <tr> <td>
+            {{ fpmessage }}
+       </td></tr>
+    </tr>
+    </table>
+    </form>
+    {% endif %}
+</body>
+</html>

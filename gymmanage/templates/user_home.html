@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+</head>
+<body style="background: url({% static 'img/grey' %}.jpeg);background-size: cover">
+<table border="5" align="center">
+    <tr><td colspan="5" align="center"><font  size="8"> WELCOME:<b><font size="8">{{ reg.Name }}</font></b></font></td></tr>
+    <tr><td><a href="/viewprofile/?type={{ reg.Email }}">View Profile</a></td>
+        <td><a href="/viewplans/?type={{ reg.Email }}">Viewplans</a></td>
+        <td><a href="/paymentp/?type={{ reg.Email }}">Payment</a></td>
+        <td><a href="/suggestion/?type={{ reg.Email }}">Suggestion</a></td>
+        <td><a href="/userlogout/">logout</a></td>
+</tr>
+</table>
+{% if type == "viewprofile" %}
+    <table align="center" border="3">
+        <tr><td><font color="black"> {{ reg.Idno }}</font></td></tr>
+        <tr><td><font color="black">{{ reg.Name }}</font></td></tr>
+        <tr><td><font color="black">{{ reg.Age }}</font></td></tr>
+        <tr><td><font color="black">{{ reg.Contact_no}}</font></td></tr>
+        <tr><td><font color="black">{{ reg.Email }}</font></td></tr>
+        <tr><td><font color="black">{{ reg.Address }}</font></td></tr>
+        <td><a href="/update/?type={{ reg.Email }}"><font color="#00008b">Update</font></a></td></tr>
+    <form action="/deleteuser/?type=del" method="post">
+        {% csrf_token %}
+        <tr><td><input type="hidden" value="{{ reg.Email }}" name="email"></td></tr>
+        <tr><td><input type="submit" value="delete"></td></tr>
+        </form>
+    </table>
+{% endif %}
+{% if type == "viewplans" %}
+    <table align="center" border="0" width="500">
+    <tr><td align="center"><h3>viewplans</h3></td></tr>
+    {% for x in res %}
+        <tr><td><font color="blue" >{{ x.Name }}</font></td></tr>
+        <tr><td>============================</td></tr>
+        <tr><td><font color="red" >{{ x.Plan_Description }}</font></td></tr>
+        <tr><td> <a href="/join/?type={{ reg.Email }}"><font color="navy">JOIN</font></a></td></tr>
+    {% endfor %}
+    </table>
+{% endif %}
+{% if type == "paymentp" %}
+    <form action="/paymentaf/" method="post">
+    {% csrf_token %}
+    <table align="center" border="3">
+    <tr><td>Payment</td></tr>
+        <tr><td><select><option>Debit Card</option>
+        <option>Credit card</option>
+        <option>Net Banking</option></select></td></tr>
+        <tr><td><input type="hidden" name="email" value="{{ reg.Email }}"></td></tr>
+    <tr><td align="center"><input type="submit" value="pay"></td></tr>
+{#        {{ mess }}#}
+    </table>
+    </form>
+{% endif %}
+{% if type == "nopayment" %}
+    <table align="center"><tr><th>{{ mess }}</th></tr></table>
+{% endif %}
+{% if type == "suggestion" %}
+    <form action="/usuggestion/" method="post">
+    {% csrf_token %}
+    <table align="center" border="3">
+    <tr><td>Suggestion</td></tr>
+        <tr><td><input type="email" value="{{ reg.Email }}" readonly name="email"></td></tr>
+        <tr><td><input type="hidden" value="{{ reg.Email }}" name="email"></td></tr>
+                <tr><td><input type="date" name="date"></td></tr>
+        <tr><td><textarea name="suggestion" required placeholder="enter your suggestion" rows="4" cols="15"></textarea></td></tr>
+   <tr><td align="right"><input type="submit" value="save"></td></tr>
+{#        {% if type == "givesuggestion" %}#}
+{#      <table align="center"><tr><td>{{ mes }}</td></tr></table>#}
+{#            {% endif %}#}
+{#    </table>#}
+    </table>
+        <table align="center">
+    <tr><td><a href="/viewusersuggestions/?type={{ reg.Email }}">viewusersuggestions</a> </td></tr></table>
+    </form>
+{#    <tr><td><a href="/previoussuggestions/?type={{ reg.Email }}">Go To Previous Suggestions</a> </td></tr></form>#}
+    {% endif %}
+<table align="center" border="0">
+{% if type == "viewsugg" %}
+    {% for x in reee %}
+      <tr><td>{{ x.suggestions }}<br></td></tr>
+        {#    <tr><td><a href="/deleteusersuggestion/?type=">Delete</a> </td></tr>#}
+        <form action="/deleteusersuggestion/" method="post">
+        {% csrf_token %}
+        <tr><td><input type="hidden" value="{{ reg.Email }}" name="email"></td></tr>
+        <tr><td><input type="hidden" value="{{ x.suggestions }}" name="suggest"></td></tr>
+        <tr><td><input type="submit" value="delete"></td></tr>
+        </form>
+
+     {% endfor %}
+     <tr><td> <a href="/goback/?type={{ reg.Email }}">Go back</a></td></tr>
+{% endif %}
+</table>
+{% if type == "delli" %}
+    <form action="/conuserdel/" method="post">
+    {% csrf_token %}
+  <table align="center">
+      <tr><th>ARE YOU SURE DO YOU WANT TO DELETE</th></tr>
+    <tr><td><input type="radio" placeholder="Yes" value="Yes" required name="r1">Yes</td></tr>
+    <tr><td><input type="radio" placeholder="no" value="no" required name="r1" checked>No</td></tr>
+    <tr><td><input type="hidden"  value="{{ reg.Email }}" name="email"></td></tr>
+    <tr><td><input type="hidden"  value="{{ rem.suggestions }}" name="suggestions"></td></tr>
+    <tr><td><input type="submit"  value="delete"></td></tr>
+</table>
+</form>
+{% endif %}
+{#<tr><td> <a href="/goback/">Go back</a></td></tr>#}
+
+{#{% if type == "prevsuggestion" %}#}
+{#    <form action="/delsugg/" method="post"></form>#}
+{#    <table align="center" >#}
+{#    <tr><td><input type="submit" value="Delete sug"></td></tr>#}
+{#    <tr><td><input type="hidden" value="email" name="email"></td></tr>#}
+{#    <tr><td><input type="hidden" value="suggestion" name="suggestion"></td></tr>#}
+{#    </table>#}
+{#{% endif %}#}
+
+{% if type == "givesuggestion" %}
+    <table align="center"><tr><td>{{ mes}}</td></tr></table>
+{% endif %}
+
+{% if type == "update" %}
+    <form action="/updateuser/" method="post">
+    {% csrf_token %}
+    <table align="center" border="3">
+    <tr><td><input type="number" placeholder="idno" value="{{ reg.Idno }}" required name="idno" readonly></td></tr>
+    <tr><td><input type="text" placeholder="name" required name="name" value="{{ reg.Name  }}"></td></tr>
+    <tr><td><input type="number" placeholder="age" required name="age" value="{{ reg.Age }}"></td></tr>
+    <tr><td><input type="number" placeholder="contact" required name="contact" value="{{ reg.Contact_no }}"></td></tr>
+    <tr><td><input type="email" placeholder="email" required name="email" value="{{ reg.Email }}" readonly></td></tr>
+    <tr><td><input type="password" placeholder="password" required name="password" value="{{ reg.Password }}"></td></tr>
+    <tr><td><input type="text" placeholder="address" required name="address" value="{{ reg.Address }}"></td></tr>
+    <tr><td><input type="submit" value="update"></td></tr>
+    </table>
+    </form>
+{% endif %}
+{% if type == "del" %}
+    <form action="/confirmdel/" method="post">
+     {% csrf_token %}
+<table align="center">
+    <tr><td><input type="radio" placeholder="Yes" value="Yes" required name="d1">Yes</td></tr>
+    <tr><td><input type="radio" placeholder="no" value="no" required name="d1" checked>No</td></tr>
+    <tr><td><input type="hidden"  value="{{ reg.Email }}" name="email"></td></tr>
+    <tr><td><input type="submit"  value="delete"></td></tr>
+</table>
+    </form>
+{% endif %}
+</body>
+</html>

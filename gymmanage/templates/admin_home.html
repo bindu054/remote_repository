@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+</head>
+<body style="background: url({% static 'img/grey' %}.jpeg);background-size: cover">
+<table border="5" align="center">
+       <tr><td><a href="/addplan/?type=addplan">ADD PLANS</a></td>
+       <td><a href="/adminviewplan/">VIEW PLANS</a></td>
+       <td><a href="/viewsuggestions/?type=viewsuggestions"> VIEW SUGGESTIONS</a></td>
+       <td><a href="/payment/?type=payment">VIEW PAYMENTS</a></td>
+           <td><a href="/viewuser/?type=viewuser"> VIEW USERS</a></td>
+           <td><a href="/adminlogout/?type=logout"> LOGOUT</a></td>
+       </tr>
+</table>
+{#    {% endif %}#}
+       {% if type == "addplan" %}
+           <form action="/admplans/" method="post">
+           {% csrf_token %}
+        <table align="center" border="3">
+       <tr><td><input type="text" placeholder=" plan name" required name="name"></td></tr>
+            <tr><td><textarea  placeholder="description" required name="description" rows="3" cols="20"></textarea></td></tr>
+       <tr><td align="right"><input type="submit" value="add"></td></tr>
+   </table>
+          <tr><td align="center">{{ mess }}</td></tr>
+           </form>
+       {% endif %}
+{% if type == 'plan' %}
+    <table align="center"><tr><td >{{ mess }}</td></tr></table>
+{% endif %}
+   {% if type == "viewsuggestions" %}
+{#       <form action="//" method="post">#}
+       {% csrf_token %}
+   <table align="center" border="3">
+       <tr><td><h4>VIEW SUGGESTIONS</h4></td></tr>
+       {% for x in res %}
+           <tr><td>{{ x.suggestions }}</td></tr>
+           <tr><td>{{ x.date }}</td></tr>
+{#        <form action="/deletevsugg/" method="post">#}
+{#        {% csrf_token %}#}
+{#            <tr><td><input type="hidden" value="{{ x.Email  }}" name="email"></td></tr>#}
+{#            <tr><td><input type="hidden" value="{{ x.suggestions  }}" name="suggestion"></td></tr>#}
+{#        <tr><td><input type="submit" value="delete"></td></tr>#}
+{#        </form>#}
+
+   {% endfor %}</table>
+{% endif %}
+{#       </form>#}
+
+   {% if type == "payment" %}
+   <table align="center" >
+       <tr><td><h4>No Payments Done</h4></td></tr>
+{#       <tr><td><h4>View Payment</h4></td></tr>#}
+   </table>
+   {% endif %}
+   {% if type == "viewuser" %}
+   <table align="center" border="3">
+{#       <tr><td>user</td>#}
+       <tr><td>mail</td>
+       <td>name</td>
+       <td>idno</td>
+       <td>Update</td>
+       <td>Delete</td></tr>
+       {% for x in res %}
+           <tr><td>{{ x.Email }}</td>
+           <td>{{ x.Name }}</td>
+           <td>{{ x.Idno }}</td>
+           <td><a href="/viewuserupdate/?type={{ x.Email }}">Update</a> </td>
+               <td><form action="/delhi/" method="post">
+                   {% csrf_token %}
+                   <input type="hidden" value="{{ x.Email }}" name="email">
+           <input type="submit" value="Delete"></form></td>
+           </tr>
+   {% endfor %}
+   </table>
+   {% endif %}
+   </table>
+
+    </form>
+{% if view %}
+<table align="center" border="0" width="500">
+    {% for x in view %}
+        <tr><td><b>{{ x.Name }}</b></td></tr>
+        <tr><td>{{ x.Plan_Description }}</td></tr>
+        <tr><td><a href="/update{{ x.Name }}/">update</a> </td></tr>
+        <form action="/deleteplan{{ x.Name }}/" method="post">
+        {% csrf_token %}
+        <tr><td><input type="submit" value="delete"></td></tr>
+        </form>
+    {% endfor %}
+</table>
+{% endif %}
+{#{% if type == "delhi" %}#}
+{#    <form action="/confirmaddel/" method="post">#}
+{#    {% csrf_token %}#}
+{#    <table align="center">#}
+{#    <tr><td><input type="radio" placeholder="Yes" value="Yes" required name="y1">Yes</td></tr>#}
+{#    <tr><td><input type="radio" placeholder="no" value="no" required name="y1" checked>No</td></tr>#}
+{#    <tr><td><input type="hidden"  value="{{ reg.Email }}" name="email"></td></tr>#}
+{#    <tr><td><input type="submit"  value="delete"></td></tr>#}
+{#    </table>#}
+{#    </form>#}
+{#{% endif %}#}
+{#{% if type == "mess" %}#}
+{#    <tr><td>{{ mess }}</td></tr>#}
+{#{% endif %}#}
+{% if type == "userup" %}
+    <form action="/userdataupdate/" method="post">
+    {% csrf_token %}
+    <table align="center" border="3">
+    <tr><td><input type="number" placeholder="idno" value="{{ reg.Idno }}" required name="idno" readonly></td></tr>
+    <tr><td><input type="text" placeholder="name" required name="name" value="{{ reg.Name  }}"></td></tr>
+    <tr><td>
+        <input type="number" placeholder="age" required name="age" value="{{ reg.Age }}"></td></tr>
+    <tr><td><input type="number" placeholder="contact" required name="contact" value="{{ reg.Contact_no }}"></td></tr>
+    <tr><td><input type="email" placeholder="email" required name="email" value="{{ reg.Email }}" readonly></td></tr>
+    <tr><td><input type="password" placeholder="password" required name="password" value="{{ reg.Password }}"></td></tr>
+    <tr><td><input type="text" placeholder="address" required name="address" value="{{ reg.Address }}"></td></tr>
+    <tr><td><input type="submit" value="update"></td></tr>
+    </table>
+    </form>
+
+{% endif %}
+</body>
+</html>
